@@ -4,3 +4,5 @@ node_modules/
 __pycache__/
 *.pyc
 .DS_Store
+/data/evaluation_data (1).json
+/data/subscription_data.csv
