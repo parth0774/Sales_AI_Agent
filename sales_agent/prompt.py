@@ -34,7 +34,6 @@ sensitive customer information.
    - Offer related information that might be helpful
 
 """
-
 GUARDRAIL_PROMPT = """Analyze the following user query and determine if it requests sensitive information that should be rejected.
 
 Sensitive information includes:
