@@ -1,19 +1,10 @@
 import os
 import pandas as pd
 from pathlib import Path
-from datetime import datetime
 from langchain_experimental.utilities import PythonREPL
 from langchain_core.tools import Tool
 from pydantic import BaseModel, Field
 import logging
-import json
-
-# Setup logging
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.StreamHandler()]
-)
 
 def get_dataframe_info(csv_path: str) -> dict:
     """
@@ -46,30 +37,48 @@ def get_dataframe_info(csv_path: str) -> dict:
 
 def create_dataframe_preamble(csv_path: str) -> str:
     """
-    Generate a preamble describing the DataFrame schema for the model.
+    Generate a preamble describing the DataFrame schema for the model,
+    including data types and unique sample values.
     """
     df_info = get_dataframe_info(csv_path)
-    
+
     if 'error' in df_info:
         return f"Error loading DataFrame info: {df_info['error']}"
-    
-    preamble = f"""You are working with a pandas DataFrame named 'df'.
-**DataFrame Structure:**
-- Total rows: {df_info['total_rows']}
-- Columns: {', '.join(df_info['column_names'])}
 
-**Column Details:**
-"""
+    # Load the actual dataframe to compute unique values
+    df = pd.read_csv(csv_path)
+
+    preamble = (
+        "You are working with a pandas DataFrame named 'df'.\n"
+        "**DataFrame Structure:**\n"
+        f"- Total rows: {df_info['total_rows']}\n"
+        f"- Columns: {', '.join(df_info['column_names'])}\n\n"
+        "**Column Details:**\n"
+    )
+
     for col_info in df_info['columns']:
-        preamble += f"- {col_info['name']} ({col_info['dtype']})\n"
-    
-    preamble += """
-**Instructions:**
-- DataFrame 'df' is pre-loaded and ready to use.
-- Date columns, if any, are converted to datetime.
-- Boolean columns, if any, are converted to True/False.
-- Always return or print the result of your Python code.
-"""
+        col = col_info['name']
+        dtype = col_info['dtype']
+
+        # Get unique values (safe & truncated)
+        uniques = df[col].dropna().unique()
+        unique_list = uniques[:10].tolist()  # limit to first 10 unique values
+
+        more = f" (+{len(uniques) - 10} more)" if len(uniques) > 10 else ""
+
+        preamble += (
+            f"- {col} ({dtype})\n"
+            f"    • Unique values: {unique_list}{more}\n"
+        )
+
+    preamble += (
+        "\n**Instructions:**\n"
+        "- DataFrame 'df' is pre-loaded and ready to use.\n"
+        "- Date columns, if any, are converted to datetime.\n"
+        "- Boolean columns, if any, are converted to True/False.\n"
+        "- Always return or print the result of your Python code.\n"
+    )
+
     return preamble
 
 
@@ -80,7 +89,7 @@ def create_python_repl_tool(csv_path: str) -> Tool:
     path = Path(csv_path).resolve()
     df_info = get_dataframe_info(csv_path)
     df_preamble = create_dataframe_preamble(csv_path)
-    
+    print(df_preamble)
     # Initialization code: runs once per execution
     init_code = f"""import pandas as pd
 import json
@@ -125,13 +134,8 @@ print("DataFrame loaded successfully with shape:", df.shape)
             return f"Error executing Python code: {str(e)}\nCheck your syntax and DataFrame column names."
     
     # Tool description
-    if 'error' not in df_info:
-        column_list = ', '.join(df_info['column_names'])
-        tool_description = f"""Python shell for querying subscription data. DataFrame 'df' has {df_info['total_rows']} rows.
-Available columns: {column_list}
-"""
-    else:
-        tool_description = "Python shell for querying subscription data. DataFrame 'df' is available."
+    column_list = ', '.join(df_info['column_names'])
+    tool_description = f"""Python shell for querying subscription data. DataFrame 'df' has {df_info['total_rows']} rows. Available columns: {column_list}."""
     
     # Define tool input schema
     class ToolInput(BaseModel):

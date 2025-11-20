@@ -9,16 +9,20 @@ from tools import get_subscription_tool, create_dataframe_preamble, get_datafram
 from langchain.agents import create_agent
 from dotenv import load_dotenv
 import logging
-
+from pathlib import Path
+CURRENT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = CURRENT_DIR.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 # Load environment variables
 load_dotenv()
 
 #Setup logging
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.StreamHandler()]
-)
+# logging.basicConfig(
+#     level=logging.DEBUG,
+#     format="%(asctime)s [%(levelname)s] %(message)s",
+#     handlers=[logging.StreamHandler()]
+# )
 
 class SalesSupportAgent:
     """Sales Support Agent for subscription data queries using LangChain create_agent."""
@@ -124,7 +128,7 @@ class SalesSupportAgent:
 
 def main():
     """Main function for interactive testing."""
-    csv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "subscription_data.csv")
+    csv_path = PROJECT_ROOT / "data" / "subscription_data.csv"
     
     print("Initializing Sales Support Agent...")
     try:
