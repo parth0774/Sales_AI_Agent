@@ -9,13 +9,16 @@ from pathlib import Path
 from typing import Any, Dict, List
 from dotenv import load_dotenv
 import os
+# Load environment variables
+load_dotenv()
 
+# Ensure the project root (parent of this file's directory) is on sys.path
 CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 from sales_agent.agent import SalesSupportAgent 
-load_dotenv()
+
 
 
 def load_evaluation_data(path: Path) -> List[Dict[str, Any]]:

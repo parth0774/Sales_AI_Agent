@@ -105,7 +105,6 @@ class SalesSupportAgent:
         try:
             user_query ={"messages": [HumanMessage(content=user_query)]}
             response = self.agent.invoke(input=user_query)
-            print(response)
             return response['messages'][-1].content
         except Exception as e:
             # Handle edge cases and errors gracefully
@@ -150,7 +149,6 @@ def main():
             print("\nAgent: ", end="")
             response = agent.query(user_input)
             print(response)
-            print()
             
     except KeyboardInterrupt:
         print("\n\nSession interrupted. Goodbye!")
