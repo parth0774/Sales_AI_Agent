@@ -1,10 +1,14 @@
 import os
 import pandas as pd
 from pathlib import Path
+import warnings
 from langchain_experimental.utilities import PythonREPL
 from langchain_core.tools import Tool
 from pydantic import BaseModel, Field
 import logging
+
+warnings.filterwarnings("ignore", message=".*Python REPL can execute arbitrary code.*")
+warnings.filterwarnings("ignore", category=UserWarning, module="langchain_experimental.utilities.python")
 
 def get_dataframe_info(csv_path: str) -> dict:
     """

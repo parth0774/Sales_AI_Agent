@@ -9,16 +9,12 @@ from pathlib import Path
 from typing import Any, Dict, List
 from dotenv import load_dotenv
 import os
-# Load environment variables
-load_dotenv()
-
-# Ensure the project root (parent of this file's directory) is on sys.path
 CURRENT_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = CURRENT_DIR.parent
+PROJECT_ROOT = CURRENT_DIR.parent.parent  # Go up to sales_agent directory
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 from AI_Agent_Part_1.agent import SalesSupportAgent 
-
+load_dotenv()
 
 
 def load_evaluation_data(path: Path) -> List[Dict[str, Any]]:
@@ -34,6 +30,9 @@ def load_evaluation_data(path: Path) -> List[Dict[str, Any]]:
 
 def write_results(path: Path, results: List[Dict[str, str]]) -> None:
     """Persist agent responses and metadata to disk."""
+    # Ensure parent directory exists
+    path.parent.mkdir(parents=True, exist_ok=True)
+    
     output_payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "results": results,
@@ -83,7 +82,7 @@ def run_evaluation(
 if __name__ == "__main__":
     evaluation_path = PROJECT_ROOT / "data" / "evaluation_data (1).json"
     subscription_data_path = PROJECT_ROOT / "data" / "subscription_data.csv"
-    output_path = CURRENT_DIR / "agent_responses.json"
+    output_path = CURRENT_DIR.parent / "evaluation_pipeline" / "evaluation_dataset.json"
 
     run_evaluation(
         evaluation_json=evaluation_path,

@@ -1,19 +1,23 @@
 import os
 import sys
-from typing import Optional
-from langchain_cohere import ChatCohere
-from langchain_core.messages import HumanMessage
-from prompt import SYSTEM_PROMPT
-from guardrails import Guardrails
-from tools import get_subscription_tool, create_dataframe_preamble, get_dataframe_info
+from pathlib import Path
 from langchain.agents import create_agent
 from dotenv import load_dotenv
 import logging
-from pathlib import Path
+from typing import Optional
+from langchain_cohere import ChatCohere
+from langchain_core.messages import HumanMessage
 CURRENT_DIR = Path(__file__).resolve().parent
+if str(CURRENT_DIR) not in sys.path:
+    sys.path.insert(0, str(CURRENT_DIR))
 PROJECT_ROOT = CURRENT_DIR.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
+from prompt import SYSTEM_PROMPT
+from guardrails import Guardrails
+from tools import get_subscription_tool, create_dataframe_preamble, get_dataframe_info
+
+
 # Load environment variables
 load_dotenv()
 
