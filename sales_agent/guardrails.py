@@ -48,6 +48,32 @@ class Guardrails:
             if pattern.search(text):
                 return True, f"Matched sensitive pattern: {pattern.pattern}"
         return False, "No sensitive pattern detected"
+    
+    def _check_llm(self, query: str) -> Tuple[bool, Optional[str]]:
+        """
+        Use LLM to analyze query intent for sensitive information.
+        
+        Args:
+            query: User query to check
+            
+        Returns:
+            Tuple of (should_reject, reason)
+        """
+        if not self.llm:
+            return False, None
+        
+        try:
+            guardrail_prompt = GUARDRAIL_PROMPT.format(query=query)
+            response = self.llm.invoke(guardrail_prompt)
+            response_text = response.content.strip().upper()
+            
+            if "REJECT" in response_text:
+                return True, "LLM detected sensitive information request"
+            return False, None
+        except Exception as e:
+            # If LLM check fails, don't reject (fail open)
+            print(f"Warning: Guardrail LLM check failed: {e}")
+            return False, None
 
     def should_reject(self, text: str):
         # Step 1: Regex first
