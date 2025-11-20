@@ -1,5 +1,7 @@
 import os
 import json
+import csv
+from pathlib import Path
 from dotenv import load_dotenv
 from openevals.llm import create_llm_as_judge
 from openevals.prompts import (
@@ -79,27 +81,93 @@ class RagasTest:
 
         return results
 
-# 4. Test with your Data
-if __name__ == "__main__":
-    # Your provided JSON data
-    test_data = {
-        "question": "How many customers are currently on the Enterprise plan?",
-        "golden_answer": "There are 6 customers on the Enterprise plan: Acme Corp, Global Finance Ltd, Legal Partners LLP, Pharma Innovations, MegaCorp International, and City Hospital Network.",
-        "evaluation_criteria": "Should correctly count all subscriptions with plan_tier='Enterprise' (6 total)",
-        "agent_response": "There are currently 6 customers on the Enterprise plan."
-    }
-    test_data_1 = {
-        "question": "What is the monthly revenue for Acme Corp?",
-        "golden_answer": "Acme Corp generates $15,000 in monthly revenue.",
-        "evaluation_criteria": "Should extract monthly_revenue from the Acme Corp subscription record.",
-        "agent_response": "Acme Corp generates $15,000 per month."
-    }
-    ragas_test = RagasTest()
-    ragas_test.initialize_evaluators()
-    eval_results = ragas_test.run_evaluation(test_data_1)
+    def evaluate_dataset(self, dataset_path: Path, output_csv_path: Path):
+        """Load dataset from JSON and evaluate all data points, saving results to CSV."""
+        # Load dataset
+        print(f"Loading dataset from {dataset_path}...")
+        with dataset_path.open("r", encoding="utf-8") as f:
+            dataset = json.load(f)
+        
+        data_points = dataset.get("results", [])
+        if not data_points:
+            raise ValueError("No 'results' found in dataset JSON")
+        
+        print(f"Found {len(data_points)} data points to evaluate.\n")
+        
+        # Initialize evaluators
+        print("Initializing evaluators...")
+        self.initialize_evaluators()
+        print("Evaluators initialized.\n")
+        
+        # Prepare CSV data
+        csv_rows = []
+        
+        # Evaluate each data point
+        for idx, data_point in enumerate(data_points, start=1):
+            print(f"[{idx}/{len(data_points)}] Processing: {data_point['question'][:60]}...")
+            
+            try:
+                eval_results = self.run_evaluation(data_point)
+                
+                # Prepare row for CSV
+                row = {
+                    "question": data_point.get("question", ""),
+                    "golden_answer": data_point.get("golden_answer", ""),
+                    "agent_response": data_point.get("agent_response", ""),
+                    "evaluation_criteria": data_point.get("evaluation_criteria", ""),
+                    "correctness_score": eval_results.get("correctness", {}).get("score", ""),
+                    "correctness_comment": eval_results.get("correctness", {}).get("comment", ""),
+                    "conciseness_score": eval_results.get("conciseness", {}).get("score", ""),
+                    "conciseness_comment": eval_results.get("conciseness", {}).get("comment", ""),
+                    "hallucination_score": eval_results.get("hallucination", {}).get("score", ""),
+                    "hallucination_comment": eval_results.get("hallucination", {}).get("comment", ""),
+                    "criteria_adherence_score": eval_results.get("criteria_adherence", {}).get("score", ""),
+                    "criteria_adherence_comment": eval_results.get("criteria_adherence", {}).get("comment", ""),
+                }
+                csv_rows.append(row)
+                
+                print(f"  ✓ Completed\n")
+                
+            except Exception as e:
+                print(f"  ✗ Error evaluating: {str(e)}\n")
+                # Add row with error
+                row = {
+                    "question": data_point.get("question", ""),
+                    "golden_answer": data_point.get("golden_answer", ""),
+                    "agent_response": data_point.get("agent_response", ""),
+                    "evaluation_criteria": data_point.get("evaluation_criteria", ""),
+                    "correctness_score": "",
+                    "correctness_comment": f"Error: {str(e)}",
+                    "conciseness_score": "",
+                    "conciseness_comment": "",
+                    "hallucination_score": "",
+                    "hallucination_comment": "",
+                    "criteria_adherence_score": "",
+                    "criteria_adherence_comment": "",
+                }
+                csv_rows.append(row)
+        
+        # Write to CSV
+        print(f"Writing results to {output_csv_path}...")
+        output_csv_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        if csv_rows:
+            fieldnames = csv_rows[0].keys()
+            with output_csv_path.open("w", newline="", encoding="utf-8") as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(csv_rows)
+        
+        print(f"✓ Evaluation complete! Results saved to {output_csv_path}")
+        print(f"  Total evaluations: {len(csv_rows)}")
 
-    print("\n=== Evaluation Results ===")
-    for metric, result in eval_results.items():
-        print(f"\nMetric: {metric.upper()}")
-        print(f"Score: {result['score']}")
-        print(f"Reason: {result['comment']}")
+
+if __name__ == "__main__":
+    # Get current directory and file paths
+    CURRENT_DIR = Path(__file__).resolve().parent
+    dataset_path = CURRENT_DIR / "evaluation_dataset.json"
+    output_csv_path = CURRENT_DIR / "eval" / "evaluation_results.csv"
+    
+    # Run evaluation pipeline
+    ragas_test = RagasTest()
+    ragas_test.evaluate_dataset(dataset_path, output_csv_path)
