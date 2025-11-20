@@ -32,22 +32,26 @@ class RagasTest:
         self.correctness_evaluator = create_llm_as_judge(
             prompt=CORRECTNESS_PROMPT,
             judge=self.cohere_judge,
-            feedback_key="correctness"
+            feedback_key="correctness",
+            choices=[0.0,0.1,0.2,0.3, 0.5,0.6,0.7,0.8,0.9, 1.0]
         )
         self.conciseness_evaluator = create_llm_as_judge(
             prompt=CONCISENESS_PROMPT,
             judge=self.cohere_judge,
-            feedback_key="conciseness"
+            feedback_key="conciseness",
+            choices=[0.0,0.1,0.2,0.3, 0.5,0.6,0.7,0.8,0.9, 1.0]
         )
         self.hallucination_evaluator = create_llm_as_judge(
             prompt=HALLUCINATION_PROMPT,
             judge=self.cohere_judge,
-            feedback_key="hallucination"
+            feedback_key="hallucination",
+            choices=[0.0,0.5,0.8,1.0]
         )
         self.criteria_evaluator = create_llm_as_judge(
             prompt=CUSTOM_CRITERIA_PROMPT,
             judge=self.cohere_judge,
-            feedback_key="criteria_adherence"
+            feedback_key="criteria_adherence",
+            choices=[0.0,0.1,0.2,0.3, 0.5,0.6,0.7,0.8,0.9, 1.0]
         )
 
     def run_evaluation(self, data_point):

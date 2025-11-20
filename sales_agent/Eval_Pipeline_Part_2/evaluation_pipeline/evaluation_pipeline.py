@@ -25,22 +25,26 @@ class RagasTest:
         self.correctness_evaluator = create_llm_as_judge(
             prompt=CORRECTNESS_PROMPT,
             judge=self.cohere_judge,
-            feedback_key="correctness"
+            feedback_key="correctness",
+            choices=[0.0,0.5,0.8,1.0]
         )
         self.conciseness_evaluator = create_llm_as_judge(
             prompt=CONCISENESS_PROMPT,
             judge=self.cohere_judge,
-            feedback_key="conciseness"
+            feedback_key="conciseness",
+            choices=[0.0,0.5,0.8,1.0]
         )
         self.hallucination_evaluator = create_llm_as_judge(
             prompt=HALLUCINATION_PROMPT,
             judge=self.cohere_judge,
-            feedback_key="hallucination"
+            feedback_key="hallucination",
+            choices=[0.0,0.5,0.8,1.0]
         )
         self.criteria_evaluator = create_llm_as_judge(
             prompt=CUSTOM_CRITERIA_PROMPT,
             judge=self.cohere_judge,
-            feedback_key="criteria_adherence"
+            feedback_key="criteria_adherence",
+            choices=[0.0,0.5,0.8,1.0]
         )
 
     def run_evaluation(self, data_point):
@@ -166,7 +170,7 @@ if __name__ == "__main__":
     # Get current directory and file paths
     CURRENT_DIR = Path(__file__).resolve().parent
     dataset_path = CURRENT_DIR / "evaluation_dataset.json"
-    output_csv_path = CURRENT_DIR / "eval" / "evaluation_results.csv"
+    output_csv_path = CURRENT_DIR / "evaluation_output" / "evaluation_results_v1.csv"
     
     # Run evaluation pipeline
     ragas_test = RagasTest()
