@@ -10,7 +10,9 @@ from typing import Any, Dict, List
 from dotenv import load_dotenv
 import os
 CURRENT_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = CURRENT_DIR.parent.parent.parent  # Go up to sales_agent directory
+# File is at: sales_agent/Eval_Pipeline_Part_2/create_eval/create_model_response.py
+# Go up to sales_agent directory: parent.parent
+PROJECT_ROOT = CURRENT_DIR.parent.parent  # Points to sales_agent directory
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 from AI_Agent_Part_1.agent import SalesSupportAgent 
@@ -82,7 +84,7 @@ def run_evaluation(
 if __name__ == "__main__":
     evaluation_path = PROJECT_ROOT / "data" / "evaluation_data (1).json"
     subscription_data_path = PROJECT_ROOT / "data" / "subscription_data.csv"
-    output_path = CURRENT_DIR.parent / "agent_responses" / "evaluation_dataset_v3.json"
+    output_path = CURRENT_DIR.parent / "agent_responses" / "evaluation_dataset_v1.json"
 
     run_evaluation(
         evaluation_json=evaluation_path,
