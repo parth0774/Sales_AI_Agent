@@ -18,7 +18,7 @@ class RagasTest:
         self.cohere_judge = ChatCohere(
             model="command-a-03-2025", 
             temperature=0.0,
-            cohere_api_key=os.getenv("COHERE_API_KEY")
+            cohere_api_key=os.getenv("COHERE_PROD_API_KEY")
         )
 
     def initialize_evaluators(self):
@@ -169,8 +169,8 @@ class RagasTest:
 if __name__ == "__main__":
     # Get current directory and file paths
     CURRENT_DIR = Path(__file__).resolve().parent
-    dataset_path = CURRENT_DIR / "evaluation_dataset.json"
-    output_csv_path = CURRENT_DIR / "evaluation_output" / "evaluation_results_v1.csv"
+    dataset_path = CURRENT_DIR / "agent_responses" / "evaluation_dataset_v2.json"
+    output_csv_path = CURRENT_DIR / "evaluation_output" / "evaluation_results_v2.csv"
     
     # Run evaluation pipeline
     ragas_test = RagasTest()

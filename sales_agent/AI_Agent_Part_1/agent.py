@@ -1,6 +1,16 @@
 import os
 import sys
 from pathlib import Path
+import warnings
+
+# Suppress warnings before imports that might trigger them
+warnings.filterwarnings("ignore", message=".*Python REPL can execute arbitrary code.*")
+warnings.filterwarnings("ignore", category=UserWarning, module="langchain_experimental.utilities.python")
+warnings.filterwarnings("ignore", message=".*LangSmith now uses UUID v7.*")
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic.v1")
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic.v1.main")
+
 from langchain.agents import create_agent
 from dotenv import load_dotenv
 import logging
@@ -13,11 +23,9 @@ if str(CURRENT_DIR) not in sys.path:
 PROJECT_ROOT = CURRENT_DIR.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
-from prompt import SYSTEM_PROMPT
+from prompt import SYSTEM_PROMPT_V2
 from guardrails import Guardrails
 from tools import get_subscription_tool, create_dataframe_preamble, get_dataframe_info
-
-
 # Load environment variables
 load_dotenv()
 
@@ -68,7 +76,7 @@ class SalesSupportAgent:
         df_preamble = create_dataframe_preamble(df_info)
         
         # Combine system prompt with DataFrame preamble
-        enhanced_prompt = SYSTEM_PROMPT + "\n\n" + df_preamble
+        enhanced_prompt = SYSTEM_PROMPT_V2 + "\n\n" + df_preamble
 
         self.agent = create_agent(model = self.llm, tools = self.tools, system_prompt = enhanced_prompt)
 
