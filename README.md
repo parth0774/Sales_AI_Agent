@@ -59,10 +59,6 @@ Sales_AI_Agent/
 ├── README.md                          # This file
 ├── EVALUATION_REPORT.md               # Detailed evaluation analysis
 ├── requirements.txt                   # Python dependencies
-├── images/                            # Documentation images
-│   ├── chart.png                      # Performance comparison charts
-│   ├── Langsmith-1.png               # LangSmith trace screenshots
-│   └── Langsmith-2.png               # LangSmith evaluation traces
 │
 ├── sales_agent/
 │   │
@@ -99,6 +95,11 @@ Sales_AI_Agent/
 │   │   └── test_evals/               # Evaluation tests
 │   │       ├── eval_test.py
 │   │       └── single_eval_test.py
+│   │
+│   ├── images/                        # Documentation images
+│   │   ├── chart.png                  # Performance comparison charts
+│   │   ├── Langsmith-1.png           # LangSmith trace screenshots
+│   │   └── Langsmith-2.png           # LangSmith evaluation traces
 │   │
 │   └── data/                         # Data files
 │       ├── subscription_data.csv     # Customer subscription data
@@ -531,15 +532,20 @@ The agent is compatible with LangSmith for monitoring and debugging:
 
 ### LangSmith Screenshots
 
-- **Agent Execution Traces**: `images/Langsmith-1.png`
-- **Evaluation Pipeline Traces**: `images/Langsmith-2.png`
-- **Performance Charts**: `images/chart.png`
+LangSmith trace screenshots are available in the `sales_agent/images/` folder:
 
-![LangSmith Agent Traces](images/Langsmith-1.png)
+- **Agent Execution Traces**: `sales_agent/images/Langsmith-1.png`
+- **Evaluation Pipeline Traces**: `sales_agent/images/Langsmith-2.png`
+- **Performance Charts**: `sales_agent/images/chart.png`
+
+![LangSmith Agent Traces](sales_agent/images/Langsmith-1.png)
 *Agent execution traces showing query processing and tool usage*
 
-![LangSmith Evaluation Traces](images/Langsmith-2.png)
+![LangSmith Evaluation Traces](sales_agent/images/Langsmith-2.png)
 *Evaluation pipeline traces showing LLM-as-Judge scoring*
+
+![Performance Charts](sales_agent/images/chart.png)
+*Performance comparison charts across agent versions (V1, V2, V3)*
 
 ---
 
