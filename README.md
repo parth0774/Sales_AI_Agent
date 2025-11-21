@@ -1,5 +1,8 @@
 # Sales AI Agent - Complete Documentation
 
+### This README provides an overview of the codebase and the project structure.  
+### For a detailed explanation of the evaluation methodology and approach used to answer the assessment guide questions, please refer to [PROMPT_EVALUATION_APPROACH.md](PROMPT_EVALUATION_APPROACH.md).
+
 ## Table of Contents
 - [Introduction](#introduction)
 - [Project Overview](#project-overview)
@@ -547,9 +550,9 @@ LangSmith trace screenshots are available in the `sales_agent/images/` folder:
 ## Next Steps
 
 After reviewing this README:
-1. Read `EVALUATION_REPORT.md` for detailed evaluation insights
+1. Read `PROMPTS_EVALUATION_APPROACH.md` for detailed evaluation insights
 2. Run the agent interactively to see it in action
 3. Explore the evaluation results in `evaluation_output/`
 4. Review the stats notebook for performance analysis
 
-**For detailed evaluation analysis, iterations, and insights, see [EVALUATION_REPORT.md](EVALUATION_REPORT.md)**
+**For detailed evaluation analysis, iterations, and insights, see [PROMPT_EVALUATION_APPROACH.md](PROMPT_EVALUATION_APPROACH.md)**
