@@ -15,7 +15,6 @@
 - [Evaluation Pipeline](#evaluation-pipeline)
 - [File Descriptions](#file-descriptions)
 - [Technology Stack](#technology-stack)
-- [Contributing](#contributing)
 
 ---
 
