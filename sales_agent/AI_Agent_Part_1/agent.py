@@ -19,6 +19,12 @@ from guardrails import Guardrails
 from tools import get_subscription_tool, create_dataframe_preamble, get_dataframe_info
 load_dotenv()
 
+# Suppress LangSmith UUID v7 warning
+warnings.filterwarnings("ignore", message="LangSmith now uses UUID v7", category=UserWarning)
+
+# Suppress Python REPL warning from langchain_experimental
+logging.getLogger("langchain_experimental.utilities.python").setLevel(logging.ERROR)
+
 #Setup logging
 # logging.basicConfig(
 #     level=logging.DEBUG,
@@ -36,7 +42,7 @@ class SalesSupportAgent:
             api_key: Cohere API key.
         """
         # Get API key
-        self.api_key = api_key or os.getenv("COHERE_API_KEY")
+        self.api_key = api_key or os.getenv("COHERE_PROD_API_KEY")
         if not self.api_key:
             raise ValueError(
                 "Cohere API key not found."
@@ -51,14 +57,17 @@ class SalesSupportAgent:
         # Initialize guardrails with LLM
         self.guardrails = Guardrails(self.llm)
         
+        # Convert csv_path to string if it's a Path object
+        csv_path = str(csv_path) if isinstance(csv_path, Path) else csv_path
+        
         # Get DataFrame information once - reuse for all purposes
         df_info = get_dataframe_info(csv_path)
         
         # Get PythonREPL tool for querying subscription data
         self.tools = [get_subscription_tool(csv_path)]
         
-        # Create DataFrame preamble with schema information (reusing df_info)
-        df_preamble = create_dataframe_preamble(df_info)
+        # Create DataFrame preamble with schema information (using csv_path)
+        df_preamble = create_dataframe_preamble(csv_path)
         
         # Combine system prompt with DataFrame preamble
         enhanced_prompt = SYSTEM_PROMPT_V3 + "\n\n" + df_preamble
