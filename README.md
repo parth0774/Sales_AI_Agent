@@ -1,7 +1,7 @@
 # Sales AI Agent - Complete Documentation
 
 ### This README provides an overview of the codebase and the project structure.  
-### For a detailed explanation of the evaluation methodology and approach used to answer the assessment guide questions, please refer to [PROMPT_EVALUATION_APPROACH.md](PROMPT_EVALUATION_APPROACH.md).
+### For a detailed explanation of the evaluation methodology and approach used to answer the guide questions, please refer to [PROMPT_EVALUATION_APPROACH.md](PROMPT_EVALUATION_APPROACH.md).
 
 ## Table of Contents
 - [Introduction](#introduction)
