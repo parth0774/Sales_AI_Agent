@@ -173,7 +173,6 @@ if __name__ == "__main__":
     dataset_path = CURRENT_DIR / "agent_responses" / "evaluation_dataset_v3.json"
     # Save CSV results to evaluation_output directory
     output_csv_path = CURRENT_DIR / "evaluation_output" / "evaluation_results_v3.csv"
-    
     # Run evaluation pipeline
     ragas_test = RagasTest()
     ragas_test.evaluate_dataset(dataset_path, output_csv_path)

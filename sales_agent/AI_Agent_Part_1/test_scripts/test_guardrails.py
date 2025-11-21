@@ -46,6 +46,6 @@ for query in test_queries:
     print(f"  Full check  : {'REJECT' if full_flagged else 'ALLOW'} — {full_reason}")
 
     if regex_flagged:
-        print("  ✅ Regex caught it — LLM skipped")
+        print("Regex caught it — LLM skipped")
     else:
-        print("  ⚠️ Regex did NOT catch — LLM invoked")
+        print("Regex did NOT catch — LLM invoked")

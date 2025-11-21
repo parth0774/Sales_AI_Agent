@@ -4,7 +4,7 @@ from prompt import GUARDRAIL_PROMPT
 
 class Guardrails:
     """
-    Content moderation class that manages rejecting questions using regex, ML, and LLM.
+    Guardrailsclass that manages rejecting questions using regex and LLM.
     Multi-layered approach for detecting sensitive information requests.
     """
     

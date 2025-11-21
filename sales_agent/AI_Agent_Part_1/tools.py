@@ -6,7 +6,6 @@ from langchain_experimental.utilities import PythonREPL
 from langchain_core.tools import Tool
 from pydantic import BaseModel, Field
 import logging
-
 warnings.filterwarnings("ignore", message=".*Python REPL can execute arbitrary code.*")
 warnings.filterwarnings("ignore", category=UserWarning, module="langchain_experimental.utilities.python")
 
@@ -164,14 +163,14 @@ def get_subscription_tool(csv_path: str) -> Tool:
     return create_python_repl_tool(csv_path)
 
 
-# Example usage
-if __name__ == "__main__":
-    csv_file = "data/subscription_data.csv"
-    tool = get_subscription_tool(csv_file)
+# # Example usage
+# if __name__ == "__main__":
+#     csv_file = "data/subscription_data.csv"
+#     tool = get_subscription_tool(csv_file)
     
-    # Example query
-    test_code = """
-print(df.head())
-"""
-    output = tool.func(test_code)
-    print("Output:\n", output)
+#     # Example query
+#     test_code = """
+# print(df.head())
+# """
+#     output = tool.func(test_code)
+#     print("Output:\n", output)

@@ -10,8 +10,6 @@ from openevals.prompts import (
     HALLUCINATION_PROMPT
 )
 from langchain_cohere import ChatCohere
-
-# Add parent directory (evaluation_pipeline) to sys.path for imports
 CURRENT_DIR = Path(__file__).resolve().parent
 PARENT_DIR = CURRENT_DIR.parent
 if str(PARENT_DIR) not in sys.path:
@@ -92,9 +90,7 @@ class RagasTest:
 
         return results
 
-# 4. Test with your Data
 if __name__ == "__main__":
-    # Your provided JSON data
     test_data = {
         "question": "How many customers are currently on the Enterprise plan?",
         "golden_answer": "There are 6 customers on the Enterprise plan: Acme Corp, Global Finance Ltd, Legal Partners LLP, Pharma Innovations, MegaCorp International, and City Hospital Network.",

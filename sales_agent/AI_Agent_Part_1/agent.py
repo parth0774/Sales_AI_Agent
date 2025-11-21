@@ -17,7 +17,6 @@ if str(PROJECT_ROOT) not in sys.path:
 from prompt import SYSTEM_PROMPT_V3
 from guardrails import Guardrails
 from tools import get_subscription_tool, create_dataframe_preamble, get_dataframe_info
-# Load environment variables
 load_dotenv()
 
 #Setup logging
@@ -28,31 +27,26 @@ load_dotenv()
 # )
 
 class SalesSupportAgent:
-    """Sales Support Agent for subscription data queries using LangChain create_agent."""
     
     def __init__(self, csv_path: str, api_key: Optional[str] = None):
         """
         Initialize the agent.
-        
         Args:
             csv_path: Path to the subscription data CSV file
-            api_key: Cohere API key. If not provided, will try to get from COHERE_API_KEY env var.
+            api_key: Cohere API key.
         """
         # Get API key
         self.api_key = api_key or os.getenv("COHERE_API_KEY")
         if not self.api_key:
             raise ValueError(
-                "Cohere API key not found. Please set COHERE_API_KEY environment variable "
-                "or pass it as a parameter."
+                "Cohere API key not found."
             )
         
-        # Initialize Cohere LLM with command-a-03-2025 model
         self.llm = ChatCohere(
             model="command-a-03-2025",
             cohere_api_key=self.api_key,
             temperature=0.1,
         )
-        
         
         # Initialize guardrails with LLM
         self.guardrails = Guardrails(self.llm)
@@ -116,7 +110,6 @@ class SalesSupportAgent:
 
 
 def main():
-    """Main function for interactive testing."""
     csv_path = PROJECT_ROOT / "data" / "subscription_data.csv"
     
     print("Initializing Sales Support Agent...")
@@ -145,7 +138,6 @@ def main():
     except Exception as e:
         print(f"Error: {e}")
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()
