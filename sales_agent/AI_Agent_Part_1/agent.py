@@ -14,7 +14,7 @@ if str(CURRENT_DIR) not in sys.path:
 PROJECT_ROOT = CURRENT_DIR.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
-from prompt import SYSTEM_PROMPT_V1
+from prompt import SYSTEM_PROMPT_V3
 from guardrails import Guardrails
 from tools import get_subscription_tool, create_dataframe_preamble, get_dataframe_info
 # Load environment variables
@@ -67,7 +67,7 @@ class SalesSupportAgent:
         df_preamble = create_dataframe_preamble(df_info)
         
         # Combine system prompt with DataFrame preamble
-        enhanced_prompt = SYSTEM_PROMPT_V1 + "\n\n" + df_preamble
+        enhanced_prompt = SYSTEM_PROMPT_V3 + "\n\n" + df_preamble
 
         self.agent = create_agent(model = self.llm, tools = self.tools, system_prompt = enhanced_prompt)
 

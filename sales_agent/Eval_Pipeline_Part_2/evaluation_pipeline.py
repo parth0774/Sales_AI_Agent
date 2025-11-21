@@ -170,9 +170,9 @@ if __name__ == "__main__":
     # Get current directory and file paths
     CURRENT_DIR = Path(__file__).resolve().parent
     # Load JSON from agent_responses directory
-    dataset_path = CURRENT_DIR / "agent_responses" / "evaluation_dataset_v1.json"
+    dataset_path = CURRENT_DIR / "agent_responses" / "evaluation_dataset_v3.json"
     # Save CSV results to evaluation_output directory
-    output_csv_path = CURRENT_DIR / "evaluation_output" / "evaluation_results_v1.csv"
+    output_csv_path = CURRENT_DIR / "evaluation_output" / "evaluation_results_v3.csv"
     
     # Run evaluation pipeline
     ragas_test = RagasTest()
