@@ -144,11 +144,6 @@ graph LR
     E --> J[Conciseness]
     E --> K[Hallucination]
     E --> L[Criteria Adherence]
-    
-    style A fill:#e1f5ff
-    style C fill:#fff4e1
-    style F fill:#e1ffe1
-    style H fill:#ffe1f5
 ```
 
 
@@ -548,21 +543,6 @@ LangSmith trace screenshots are available in the `sales_agent/images/` folder:
 *Performance comparison charts across agent versions (V1, V2, V3)*
 
 ---
-
-## Common Issues & Troubleshooting
-
-### Issue: "Cohere API key not found"
-**Solution**: Ensure `.env` file exists in project root with `COHERE_API_KEY` set.
-
-### Issue: "CSV file not found"
-**Solution**: Verify `subscription_data.csv` exists in `sales_agent/data/` directory.
-
-### Issue: Import errors when running scripts
-**Solution**: Ensure you're running from the correct directory or using proper Python path setup.
-
-### Issue: Evaluation pipeline fails
-**Solution**: Check that `agent_responses/evaluation_dataset_v*.json` exists before running evaluation.
-
 
 ## Next Steps
 
