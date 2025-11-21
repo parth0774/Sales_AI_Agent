@@ -331,6 +331,9 @@ V3: 0.897
 | **Hallucination** | 0.860 | **0.910** | 0.895 | V2 peak |
 | **Criteria Adherence** | 0.860 | **0.900** | 0.865 | V2 peak |
 | **Overall Average** | 0.877 | **0.912** | 0.897 | V2 best |
+
+![Performance Comparison Chart](sales_agent/images/chart.png)
+
 ---
 
 ## Iterations Made
